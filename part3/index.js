@@ -48,6 +48,39 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!(body.name && body.number)) {
+    return response.status(400).json({
+      error: 'name or number is missing'
+    })
+  }
+
+  const foundPerson = persons
+    .find(person => person.name === body.name)
+
+  if (foundPerson) {
+    return response.status(400).json({
+      error: `${body.name} already exists in the phonebook`
+    })
+  }
+
+  function generateId() {
+    return Math.floor(Math.random() * 1000000000)
+  }
+
+  const personObject = {
+    id: generateId(),
+    name: body.name,
+    number: body.number
+  }
+
+  persons = persons.concat(personObject)
+  
+  return response.json(personObject)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   persons = persons.filter(person => person.id !== id)
