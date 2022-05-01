@@ -51,28 +51,14 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const foundPerson = persons
-    .find(person => person.name === body.name)
-
-  if (foundPerson) {
-    return response.status(400).json({
-      error: `${body.name} already exists in the phonebook`
-    })
-  }
-
-  function generateId() {
-    return Math.floor(Math.random() * 1000000000)
-  }
-
-  const personObject = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number
-  }
-
-  persons = persons.concat(personObject)
+  })
   
-  return response.json(personObject)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
