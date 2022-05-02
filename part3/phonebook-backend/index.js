@@ -11,7 +11,7 @@ app.use(cors())
 
 morgan.token(
   'body', 
-  function (request, response) { return JSON.stringify(req.body) }
+  function (request, response) { return JSON.stringify(request.body) }
 )
 
 app.use(morgan(
@@ -60,6 +60,15 @@ app.post('/api/persons', (request, response, next) => {
   person
     .save()
     .then(savedPerson => response.json(savedPerson))
+    .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const { number } = request.body
+
+  Person
+    .findByIdAndUpdate(request.params.id, { number }, { new: true })
+    .then(updatedPerson => response.json(updatedPerson))
     .catch(error => next(error))
 })
 
