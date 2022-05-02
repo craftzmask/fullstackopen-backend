@@ -19,10 +19,15 @@ app.use(morgan(
 ))
 
 app.get('/info', (request, response) => {
-  response.send(`
-    <p>Phonebook has info for ${phonebook.length} people</p>
-    <p>${new Date()}</p>
-  `)
+  Person
+    .find({})
+    .then(persons => {
+      response.send(`
+        <p>Phonebook has info for ${persons.length} people</p>
+        <p>${new Date()}</p>
+      `)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons', (request, response, next) => {
@@ -32,15 +37,11 @@ app.get('/api/persons', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+app.get('/api/persons/:id', (request, response, next) => {
+  Person
+    .findById(request.params.id)
+    .then(person => response.json(person))
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
