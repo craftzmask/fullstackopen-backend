@@ -53,15 +53,25 @@ app.post('/api/persons', (request, response, next) => {
     })
   }
 
-  const person = new Person({
-    name: body.name,
-    number: body.number
-  })
-  
-  person
-    .save()
-    .then(savedPerson => response.json(savedPerson))
-    .catch(error => next(error))
+  // test if person existed
+  Person.findOne({ name: body.name })
+    .then(returnedPerson => {
+      if (returnedPerson !== null) {
+        return response.status(400).json(
+          { error: `${returnedPerson.name} already existed` }
+        )
+      }
+      
+      const person = new Person({
+        name: body.name,
+        number: body.number
+      })
+      
+      person
+        .save()
+        .then(savedPerson => response.json(savedPerson))
+        .catch(error => next(error))
+    })
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
