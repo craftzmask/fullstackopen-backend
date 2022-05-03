@@ -45,26 +45,24 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.post('/api/persons', (request, response, next) => {
-  const body = request.body
+  const { name, number } = request.body
 
-  if (!(body.name && body.number)) {
+  if (!(name && number)) {
     return response.status(400).json({
       error: 'name or number is missing'
     })
   }
 
-  // test if person existed
-  Person.findOne({ name: body.name })
+  Person.findOne({ name })
     .then(returnedPerson => {
       if (returnedPerson !== null) {
         return response.status(400).json(
-          { error: `${returnedPerson.name} already existed` }
+          { error: `${name} already existed` }
         )
       }
       
       const person = new Person({
-        name: body.name,
-        number: body.number
+        name, number
       })
       
       person
