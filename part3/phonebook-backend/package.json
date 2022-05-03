@@ -10,11 +10,13 @@
     "build:ui": "rm -rf build && cd ../../../fullstackopen-frontend/part2/phonebook && npm run build && cp -r build ../../../fullstackopen-backend/part3/phonebook-backend",
     "deploy": "git push heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "author": "Khanh Chung",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^8.14.0",
     "nodemon": "^2.0.15"
   },
   "dependencies": {

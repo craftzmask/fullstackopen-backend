@@ -10,7 +10,8 @@ app.use(express.json())
 app.use(cors())
 
 morgan.token(
-  'body', 
+  'body',
+  // eslint-disable-next-line no-unused-vars
   function (request, response) { return JSON.stringify(request.body) }
 )
 
@@ -18,7 +19,7 @@ app.use(morgan(
   ':method :url :status :res[content-length] - :response-time ms :body'
 ))
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   Person
     .find({})
     .then(persons => {
@@ -60,11 +61,11 @@ app.post('/api/persons', (request, response, next) => {
           { error: `${name} already existed` }
         )
       }
-      
+
       const person = new Person({
         name, number
       })
-      
+
       person
         .save()
         .then(savedPerson => response.json(savedPerson))
@@ -77,8 +78,8 @@ app.put('/api/persons/:id', (request, response, next) => {
 
   Person
     .findByIdAndUpdate(
-      request.params.id, 
-      { number }, 
+      request.params.id,
+      { number },
       { new: true, runValidators: true, context: 'query' }
     )
     .then(updatedPerson => response.json(updatedPerson))
@@ -88,7 +89,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   Person
     .findByIdAndRemove(request.params.id)
-    .then(result => response.status(204).end())
+    .then(() => response.status(204).end())
     .catch(error => next(error))
 })
 
