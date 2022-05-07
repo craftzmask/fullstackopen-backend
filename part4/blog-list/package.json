@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -13,7 +13,8 @@
   },
   "devDependencies": {
     "jest": "^28.0.3",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "supertest": "^6.2.3"
   },
   "jest": {
     "testEnvironment": "node"
