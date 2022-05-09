@@ -78,7 +78,7 @@ test('missing title and url properties returns 400 code', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test.only('delete a blog', async () => {
+test('delete a blog', async () => {
   const blogsAtStart = await blogsInDb()
   const blogToDelete = blogsAtStart[0]
 
@@ -91,6 +91,19 @@ test.only('delete a blog', async () => {
 
   expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1)
   expect(titles).not.toContain(blogToDelete.title)
+})
+
+test.only('update a blog with different likes', async () => {
+  const blogsAtStart = await blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+
+  const response = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send ({ likes: 10 })
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  expect(response.body.likes).toBe(10)
 })
 
 afterAll(() => mongoose.connection.close())
