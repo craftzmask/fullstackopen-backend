@@ -108,4 +108,16 @@ test('missing likes property will set it to 0', async () => {
   expect(response.body.likes).toBe(0)
 })
 
+test.only('missing title and url properties returns 400 code', async () => {
+  const invalidBlog = {
+    author: "Khanh Chung",
+    likes: 1000,
+  }
+  
+  await api.post('/api/blogs')
+    .send(invalidBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
 afterAll(() => mongoose.connection.close())
