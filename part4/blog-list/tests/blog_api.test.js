@@ -73,4 +73,24 @@ test('blogs have id as their unique identifier', async () => {
   }) 
 })
 
+test('a valid blog can be added', async () => {
+  const validBlog = {
+    title: "Valid Blog",
+    author: "Khanh Chung",
+    url: "khanhchung.com",
+    likes: 1000,
+  }
+
+  await api.post('/api/blogs')
+    .send(validBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const titles = response.body.map(blog => blog.title)
+
+  expect(response.body.length).toBe(2 + 1) // only 2 inital blogs added
+  expect(titles).toContain('Valid Blog')
+})
+
 afterAll(() => mongoose.connection.close())
