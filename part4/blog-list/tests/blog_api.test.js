@@ -93,4 +93,19 @@ test('a valid blog can be added', async () => {
   expect(titles).toContain('Valid Blog')
 })
 
+test('missing likes property will set it to 0', async () => {
+  const missingLikesBlog = {
+    title: "Valid Blog",
+    author: "Khanh Chung",
+    url: "khanhchung.com",
+  }
+  
+  const response = await api.post('/api/blogs')
+    .send(missingLikesBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  
+  expect(response.body.likes).toBe(0)
+})
+
 afterAll(() => mongoose.connection.close())
