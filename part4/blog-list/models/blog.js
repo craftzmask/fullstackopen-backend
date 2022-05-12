@@ -1,4 +1,3 @@
-const { transform } = require('lodash')
 const mongoose = require('mongoose')
 
 const blogSchema = new mongoose.Schema({
