@@ -120,6 +120,10 @@ const usersInDb = async () => {
   return users.map(user => user.toJSON())
 }
 
+const getToken = async credential => {
+  const user = await User.findById(credential.id)
+}
+
 module.exports = {
   dummy,
   totalLikes,
